@@ -21,17 +21,34 @@ public class Program {
 
 		List<Product> list = new ArrayList<>();
 
-		System.out.println("Enter file path: ");
-		String sourceFileStr = sc.nextLine();
+		// Pedido para apontar o diretorio e o arquivo que será criado summary.csv
+        System.out.println("\n");
+        System.out.println("Enter a folder path)");
+        System.out.print("Path => ");
+        String strPath = sc.nextLine();
 
-		File sourceFile = new File(sourceFileStr);
+		File sourceFile = new File(strPath);
 		String sourceFolderStr = sourceFile.getParent();
 		
 		boolean success = new File(sourceFolderStr + "/out").mkdir();
 		
 		String targetFileStr = sourceFolderStr + "/out/summary.csv";
+		// lendo arquivo Ipunt
+		String arqIpunt = "/home/beowulf/Documentos/Input.csv";
+		System.out.println();
+        System.out.println("Lendo");
+        try(BufferedReader br = new BufferedReader(new FileReader(arqIpunt))){
+            String line = br.readLine();
 
-		try (BufferedReader br = new BufferedReader(new FileReader(sourceFileStr))) {
+            while (line != null) {
+                System.out.println(line);
+                line = br.readLine();
+            }
+        }catch(IOException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println("Done!");
+		try (BufferedReader br = new BufferedReader(new FileReader(strPath))) {
 
 			String itemCsv = br.readLine();
 			while (itemCsv != null) {
@@ -52,7 +69,7 @@ public class Program {
 					bw.write(item.getName() + "," + String.format("%.2f", item.total()));
 					bw.newLine();
 				}
-
+				System.out.println();
 				System.out.println(targetFileStr + " CREATED!");
 				
 			} catch (IOException e) {
@@ -62,7 +79,19 @@ public class Program {
 		} catch (IOException e) {
 			System.out.println("Error reading file: " + e.getMessage());
 		}
+		System.out.println();
+		System.out.println("Lendo");
+		try(BufferedReader br2 = new BufferedReader(new FileReader(targetFileStr))){
+			String line = br2.readLine();
 
+			while (line != null) {
+				System.out.println(line);
+				line = br2.readLine();
+			}
+		}catch(IOException e){
+			System.out.println("Error: " + e.getMessage());
+		}
+		System.out.println("Done!");
 		sc.close();
     }
 }
